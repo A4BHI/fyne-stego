@@ -14,7 +14,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-type AppUI struct {
+type appUI struct {
 	header         *canvas.Text
 	footer         *canvas.Text
 	pickfilebutton *widget.Button
@@ -22,7 +22,7 @@ type AppUI struct {
 	filefilter     storage.FileFilter
 }
 
-func (ui *AppUI) LoadUI() {
+func (ui *appUI) LoadUI() {
 	ui.header = canvas.NewText("Steganography", color.NRGBA{R: 255, G: 170, B: 0, A: 255})
 	ui.header.Alignment = fyne.TextAlignCenter
 	ui.header.TextStyle = fyne.TextStyle{Bold: true, Italic: true}
@@ -36,7 +36,7 @@ func (ui *AppUI) LoadUI() {
 	ui.filefilter = storage.NewExtensionFileFilter([]string{".png"})
 }
 
-func (ui *AppUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
+func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 	ui.pickfilebutton = widget.NewButton("Pick File", func() {
 
 		filepicker := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
@@ -59,8 +59,8 @@ func (ui *AppUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 	return layout
 }
 
-func NewAppUI() *AppUI {
-	ui := &AppUI{}
+func NewAppUI() *appUI {
+	ui := &appUI{}
 	ui.LoadUI()
 	return ui
 }
