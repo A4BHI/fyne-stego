@@ -1,10 +1,15 @@
 package ui
 
 import (
+	"fmt"
 	"image/color"
+	"io"
+	"os"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/widget"
 )
@@ -32,7 +37,26 @@ func (ui *AppUI) LoadUI() {
 }
 
 func (ui *AppUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
+	ui.pickfilebutton = widget.NewButton("Pick File", func() {
 
+		filepicker := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
+
+			sourceImage, err := io.ReadAll(reader)
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			fmt.Println(sourceImage)
+			os.WriteFile("/home/a4bhi/Desktop/fyne-stego/test.png", sourceImage, 0644)
+		}, mainwindow)
+		filepicker.SetFilter(ui.filefilter)
+		filepicker.SetConfirmText("Choose Image")
+		filepicker.Show()
+
+	})
+	layout := container.NewBorder(ui.header, ui.footer, nil, nil, ui.pickfilebutton)
+
+	return layout
 }
 
 func NewAppUI() *AppUI {
