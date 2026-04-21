@@ -37,6 +37,7 @@ func (ui *appUI) LoadUI() {
 }
 
 func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
+
 	ui.pickfilebutton = widget.NewButton("Pick File", func() {
 
 		filepicker := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
@@ -54,7 +55,8 @@ func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 		filepicker.Show()
 
 	})
-	layout := container.NewBorder(ui.header, ui.footer, nil, nil, ui.pickfilebutton)
+	tabs := container.NewAppTabs(container.NewTabItem("Encode", ui.pickfilebutton), container.NewTabItem("Decode", ui.pickfilebutton))
+	layout := container.NewBorder(ui.header, ui.footer, nil, nil, tabs)
 
 	return layout
 }
