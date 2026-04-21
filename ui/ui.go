@@ -20,6 +20,11 @@ type appUI struct {
 	pickfilebutton *widget.Button
 	sourceImage    []byte
 	filefilter     storage.FileFilter
+
+	decodeTab decodeTab
+}
+type decodeTab struct {
+	pickFileButtpm *widget.Button
 }
 
 func (ui *appUI) LoadUI() {
@@ -55,7 +60,25 @@ func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 		filepicker.Show()
 
 	})
-	tabs := container.NewAppTabs(container.NewTabItem("Encode", ui.pickfilebutton), container.NewTabItem("Decode", ui.pickfilebutton))
+
+	ui.decodeTab.pickFileButtpm = widget.NewButton("Pick File", func() {
+
+		filepicker := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
+
+			sourceImage, err := io.ReadAll(reader)
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			fmt.Println(sourceImage)
+			os.WriteFile("/home/a4bhi/Desktop/fyne-stego/test.png", sourceImage, 0644)
+		}, mainwindow)
+		filepicker.SetFilter(ui.filefilter)
+		filepicker.SetConfirmText("Choose Image")
+		filepicker.Show()
+
+	})
+	tabs := container.NewAppTabs(container.NewTabItem("Encode", ui.pickfilebutton), container.NewTabItem("Decode", ui.decodeTab.pickFileButtpm))
 	layout := container.NewBorder(ui.header, ui.footer, nil, nil, tabs)
 
 	return layout
