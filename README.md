@@ -1,1 +1,1 @@
-# legendary-octo-umbrella
+# an image steganography program made for fun :) 
