@@ -29,8 +29,10 @@ type encodeTab struct {
 	sourceImageLabel *canvas.Text //choose source image
 	selectImageBtn   *widget.Button
 
-	payloadFileLabel canvas.Text //choose the file that you want to hide inside the image
+	payloadFileLabel *canvas.Text //choose the file that you want to hide inside the image
 	selectFilebtn    *widget.Button
+
+	encodeBtn *widget.Button
 }
 type decodeTab struct {
 	pickFileButtpm *widget.Button
