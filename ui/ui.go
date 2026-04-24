@@ -55,10 +55,17 @@ func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 	ui.encodeTab.pickSourceImage = widget.NewButton("Pick File", func() {
 
 		filepicker := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
+			if reader == nil {
+
+				return
+			} //if user clicks cancel
+
+			defer reader.Close()
 
 			sourceImage, err := io.ReadAll(reader)
 			if err != nil {
 				fmt.Println(err)
+
 			}
 
 			fmt.Println(sourceImage)
