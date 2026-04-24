@@ -50,11 +50,42 @@ func (ui *appUI) LoadUI() {
 	ui.footer.TextSize = 10
 
 	ui.filefilter = storage.NewExtensionFileFilter([]string{".png"})
+
+	ui.encodeTab.sourceImageLabel = canvas.NewText("Choose Image", color.RGBA{R: 52, G: 160, B: 142, A: 255})
+	ui.encodeTab.sourceImageLabel.TextSize = 20
+
+	ui.encodeTab.payloadFileLabel = canvas.NewText("Choose Payload", color.RGBA{R: 52, G: 160, B: 142, A: 255})
+	ui.encodeTab.payloadFileLabel.TextSize = 20
 }
 
 func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 
-	ui.encodeTab.selectImageBtn = widget.NewButton("Pick File", func() {
+	ui.encodeTab.selectImageBtn = widget.NewButton("select image", func() {
+
+		filepicker := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
+			if reader == nil {
+
+				return
+			} //if user clicks cancel
+
+			defer reader.Close()
+
+			sourceImage, err := io.ReadAll(reader)
+			if err != nil {
+				fmt.Println(err)
+
+			}
+
+			fmt.Println(sourceImage)
+			os.WriteFile("/home/a4bhi/Desktop/fyne-stego/test.png", sourceImage, 0644)
+		}, mainwindow)
+		filepicker.SetFilter(ui.filefilter)
+		filepicker.SetConfirmText("Choose Image")
+		filepicker.Show()
+
+	})
+
+	ui.encodeTab.selectFilebtn = widget.NewButton("Pick File", func() {
 
 		filepicker := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
 			if reader == nil {
@@ -96,7 +127,12 @@ func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 		filepicker.Show()
 
 	})
-	tabs := container.NewAppTabs(container.NewTabItem("Encode", ui.encodeTab.selectImageBtn), container.NewTabItem("Decode", ui.decodeTab.pickFileButtpm))
+
+	imageLayout := container.NewGridWithColumns(2, ui.encodeTab.sourceImageLabel, ui.encodeTab.selectImageBtn)
+	payloadLayout := container.NewGridWithColumns(2, ui.encodeTab.payloadFileLabel, ui.encodeTab.selectFilebtn)
+
+	vbox := container.NewVBox(imageLayout, payloadLayout)
+	tabs := container.NewAppTabs(container.NewTabItem("Encode", vbox), container.NewTabItem("Decode", ui.decodeTab.pickFileButtpm))
 	layout := container.NewBorder(ui.header, ui.footer, nil, nil, tabs)
 
 	return layout
