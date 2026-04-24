@@ -21,8 +21,8 @@ type appUI struct {
 	sourceImage []byte
 	filefilter  storage.FileFilter
 
-	decodeTab decodeTab
-	encodeTab encodeTab
+	decodeTab *decodeTab
+	encodeTab *encodeTab
 }
 
 type encodeTab struct {
@@ -103,7 +103,10 @@ func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 }
 
 func NewAppUI() *appUI {
-	ui := &appUI{}
+	ui := &appUI{
+		encodeTab: &encodeTab{},
+		decodeTab: &decodeTab{},
+	}
 	ui.LoadUI()
 	return ui
 }
