@@ -15,13 +15,18 @@ import (
 )
 
 type appUI struct {
-	header         *canvas.Text
-	footer         *canvas.Text
-	pickfilebutton *widget.Button
-	sourceImage    []byte
-	filefilter     storage.FileFilter
+	header *canvas.Text
+	footer *canvas.Text
+
+	sourceImage []byte
+	filefilter  storage.FileFilter
 
 	decodeTab decodeTab
+	encodeTab encodeTab
+}
+
+type encodeTab struct {
+	pickfilebutton *widget.Button
 }
 type decodeTab struct {
 	pickFileButtpm *widget.Button
@@ -43,7 +48,7 @@ func (ui *appUI) LoadUI() {
 
 func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 
-	ui.pickfilebutton = widget.NewButton("Pick File", func() {
+	ui.encodeTab.pickfilebutton = widget.NewButton("Pick File", func() {
 
 		filepicker := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
 
@@ -78,7 +83,7 @@ func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 		filepicker.Show()
 
 	})
-	tabs := container.NewAppTabs(container.NewTabItem("Encode", ui.pickfilebutton), container.NewTabItem("Decode", ui.decodeTab.pickFileButtpm))
+	tabs := container.NewAppTabs(container.NewTabItem("Encode", ui.encodeTab.pickfilebutton), container.NewTabItem("Decode", ui.decodeTab.pickFileButtpm))
 	layout := container.NewBorder(ui.header, ui.footer, nil, nil, tabs)
 
 	return layout
