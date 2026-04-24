@@ -26,11 +26,11 @@ type appUI struct {
 }
 
 type encodeTab struct {
-	label1          *canvas.Text //choose source image
-	pickSourceImage *widget.Button
+	sourceImageLabel *canvas.Text //choose source image
+	selectImageBtn   *widget.Button
 
-	label2         canvas.Text //choose the file that you want to hide inside the image
-	pickFileToHide *widget.Button
+	payloadFileLabel canvas.Text //choose the file that you want to hide inside the image
+	selectFilebtn    *widget.Button
 }
 type decodeTab struct {
 	pickFileButtpm *widget.Button
@@ -52,7 +52,7 @@ func (ui *appUI) LoadUI() {
 
 func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 
-	ui.encodeTab.pickSourceImage = widget.NewButton("Pick File", func() {
+	ui.encodeTab.selectImageBtn = widget.NewButton("Pick File", func() {
 
 		filepicker := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
 			if reader == nil {
@@ -94,7 +94,7 @@ func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 		filepicker.Show()
 
 	})
-	tabs := container.NewAppTabs(container.NewTabItem("Encode", ui.encodeTab.pickSourceImage), container.NewTabItem("Decode", ui.decodeTab.pickFileButtpm))
+	tabs := container.NewAppTabs(container.NewTabItem("Encode", ui.encodeTab.selectImageBtn), container.NewTabItem("Decode", ui.decodeTab.pickFileButtpm))
 	layout := container.NewBorder(ui.header, ui.footer, nil, nil, tabs)
 
 	return layout
