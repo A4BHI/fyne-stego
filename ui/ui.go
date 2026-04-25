@@ -20,6 +20,7 @@ type appUI struct {
 
 	sourceImage []byte
 	filefilter  storage.FileFilter
+	spacer      *canvas.Rectangle
 
 	decodeTab *decodeTab
 	encodeTab *encodeTab
@@ -56,6 +57,9 @@ func (ui *appUI) LoadUI() {
 
 	ui.encodeTab.payloadFileLabel = canvas.NewText("Choose Payload", color.RGBA{R: 52, G: 160, B: 142, A: 255})
 	ui.encodeTab.payloadFileLabel.TextSize = 20
+
+	ui.spacer = canvas.NewRectangle(color.Transparent)
+	ui.spacer.SetMinSize(fyne.NewSize(0, 20))
 }
 
 func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
@@ -131,7 +135,7 @@ func (ui *appUI) BuildUI(mainwindow fyne.Window) fyne.CanvasObject {
 	imageLayout := container.NewGridWithColumns(2, ui.encodeTab.sourceImageLabel, ui.encodeTab.selectImageBtn)
 	payloadLayout := container.NewGridWithColumns(2, ui.encodeTab.payloadFileLabel, ui.encodeTab.selectFilebtn)
 
-	vbox := container.NewVBox(imageLayout, payloadLayout)
+	vbox := container.NewVBox(imageLayout, ui.spacer, ui.spacer, payloadLayout)
 	tabs := container.NewAppTabs(container.NewTabItem("Encode", vbox), container.NewTabItem("Decode", ui.decodeTab.pickFileButtpm))
 	layout := container.NewBorder(ui.header, ui.footer, nil, nil, tabs)
 
